@@ -134,14 +134,12 @@ img {
   outline: none;
 }
 
-/* ==========================
-   客服按钮：放大1.5倍 + 纯图标 + 紧贴右侧
-========================== */
+/* 客服按钮 */
 .service-btn {
   position: fixed;
   bottom: 80px;
   right: 0;
-  width: 120px; /* 放大1.5倍 */
+  width: 120px;
   height: auto;
   z-index: 9999;
   background: transparent;
@@ -192,7 +190,7 @@ img {
   top: 15px;
   left: 0;
   width: 100%;
-  height: 120px;
+  height: 180px;
   z-index: 999;
   pointer-events: none;
 }
@@ -205,12 +203,15 @@ img {
   white-space: nowrap;
   font-size: 15px;
   box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
 }
 .barrage-item img {
   width: 24px;
   height: 24px;
   border-radius: 50%;
   margin-right: 6px;
+  flex-shrink: 0;
 }
 @keyframes barrageMove {
   from { transform: translateX(100vw); }
@@ -316,10 +317,11 @@ setInterval(() => {
   j.innerText = s.innerText;
 }, 4000);
 
-// 头像滚动
+// 头像滚动数据源
 const surnames = ["王","李","张","刘","陈","杨","黄","赵","吴","周","徐","孙","马","朱","胡"];
 const box = document.getElementById("avatarBox");
 
+// 生成30个随机头像地址
 function create30UniqueAvatars() {
   let arr = [];
   for (let i=0;i<30;i++) {
@@ -368,12 +370,16 @@ document.getElementById("barrageToggle").onclick = () => {
   barrage.innerHTML = "";
 };
 const barNames = ["王先生","李女士","张先生","刘女士","陈先生","杨女士"];
+
 function sendBarrage() {
   if (!barOn) return;
+  // 随机取上面头像列表里的一个头像
+  let randomItem = data[Math.floor(Math.random() * data.length)];
   let b = document.createElement("div");
   b.className = "barrage-item";
-  b.style.top = Math.random()*100 + 15 + "px";
-  b.innerHTML = `<img src="https://picsum.photos/seed/${Math.random()}"> 恭喜 ${barNames[Math.floor(Math.random()*barNames.length)]} 报名成功`;
+  b.style.top = Math.random()*140 + 10 + "px";
+  // 格式：恭喜 姓名 成功报名！
+  b.innerHTML = `<img src="${randomItem.img}"> 恭喜 ${barNames[Math.floor(Math.random()*barNames.length)]} 成功报名！`;
   b.style.animation = "barrageMove 14s linear";
   barrage.appendChild(b);
   setTimeout(() => b.remove(), 14000);
