@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>最终版</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+html,body {
+  width: 100%;
+  overflow-x: hidden;
+  background: url(https://s3.bmp.ovh/2026/05/11/ANpZWm5t.png) no-repeat top center;
+  background-size: 100% auto;
+  background-attachment: fixed;
+}
+img {
+  width: 100%;
+  display: block;
+}
+
+/* 倒计时 */
+.countdown {
+  padding: 45px 15px;
+  text-align: center;
+}
+.count-title-top {
+  font-size: 34px;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 20px;
+  font-family: "黑体";
+  letter-spacing: 6px;
+}
+.count-time-line {
+  font-size: 38px;
+  color: #fff;
+  background: rgba(0,0,0,0.6);
+  padding: 15px 30px;
+  border-radius: 15px;
+  display: inline-block;
+  letter-spacing: 4px;
+}
+
+/* 统计框 */
+.data {
+  width: 92%;
+  margin: 0 auto;
+  padding: 25px;
+  background: #fff;
+  border: 2px solid #ff3a3a;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.data-row1 {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+}
+.data-row2 {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 17px;
+}
+.red-num {
+  color: #ff3a3a;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* 头像组件 */
+.avatar-box {
+  width: 92%;
+  margin: 12px auto 20px auto;
+  background: #fff;
+  border: 2px solid #ff3a3a;
+  border-top:0;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  overflow: hidden;
+  height: 240px;
+  position: relative;
+}
+.avatar-container {
+  position: absolute;
+  width: 100%;
+  animation: scrollUp 18s linear infinite;
+}
+@keyframes scrollUp {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-480px); }
+}
+.avatar-row {
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 0;
+  height: 80px;
+}
+.avatar-item {
+  width: 18%;
+  text-align: center;
+}
+.avatar-item img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 4px;
+}
+.avatar-name {
+  font-size: 12px;
+  color: #333;
+}
+
+/* 弹幕按钮 */
+.barrage-toggle {
+  position: fixed;
+  top: 20px;
+  right: -8px;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: #990000;
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
+  z-index: 9999;
+  box-shadow: 0 10px 25px rgba(255, 30, 30, 0.6) !important;
+  border: none;
+  outline: none;
+}
+
+/* ==========================
+   客服按钮：放大1.5倍 + 纯图标 + 紧贴右侧
+========================== */
+.service-btn {
+  position: fixed;
+  bottom: 80px;
+  right: 0;
+  width: 120px; /* 放大1.5倍 */
+  height: auto;
+  z-index: 9999;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+.service-btn img {
+  width: 100%;
+  height: auto;
+}
+
+/* 客服弹窗 */
+.popup-wrap {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  z-index: 99999;
+  align-items: center;
+  justify-content: center;
+}
+.popup-wrap.show {
+  display: flex;
+}
+.popup-img {
+  width: 90%;
+  max-width: 400px;
+  border-radius: 12px;
+}
+.close-popup {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background: #fff;
+  border-radius: 50%;
+  font-size: 24px;
+  color: #000;
+}
+
+/* 弹幕样式 */
+.barrage-container {
+  position: fixed;
+  top: 15px;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  z-index: 999;
+  pointer-events: none;
+}
+.barrage-item {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 30px;
+  white-space: nowrap;
+  font-size: 15px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+.barrage-item img {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+@keyframes barrageMove {
+  from { transform: translateX(100vw); }
+  to   { transform: translateX(-300px); }
+}
+
+.bottom-btn {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 12px 15px;
+  background: transparent;
+  z-index: 10;
+}
+.bottom-btn button {
+  width: 100%;
+  height: 50px;
+  background: #ff3a3a;
+  color: #fff;
+  border-radius: 50px;
+  font-size: 18px;
+  border: none;
+}
+</style>
+</head>
+<body>
+
+<button class="barrage-toggle" id="barrageToggle">弹</button>
+<div class="barrage-container" id="barrageContainer"></div>
+
+<!-- 客服按钮 -->
+<button class="service-btn" id="serviceBtn">
+  <img src="https://s3.bmp.ovh/2026/05/11/vZI7o6li.png">
+</button>
+
+<!-- 客服弹窗 -->
+<div class="popup-wrap" id="popup">
+  <button class="close-popup" id="closePopup">×</button>
+  <img src="https://s3.bmp.ovh/2026/05/11/m77fCuPb.png" class="popup-img">
+</div>
+
+<img src="https://s3.bmp.ovh/2026/05/11/6xEc2Bts.png">
+
+<div class="countdown">
+  <div class="count-title-top">活动倒计时</div>
+  <div class="count-time-line" id="countTime">00天00:00:00</div>
+</div>
+
+<div class="data">
+  <div class="data-row1">
+    <span><span class="red-num" id="sign">268</span> 人参加报名</span>
+    <span>浏览量 <span class="red-num" id="view">3692</span> 次</span>
+  </div>
+  <div class="data-row2">
+    已有 <span class="red-num" id="joinNum">268</span> 人参与
+  </div>
+</div>
+
+<div class="avatar-box">
+  <div class="avatar-container" id="avatarBox"></div>
+</div>
+
+<img src="https://s3.bmp.ovh/2026/05/11/HtOoREph.png">
+<img src="https://s3.bmp.ovh/2026/05/11/6AholBwy.png">
+<img src="https://s3.bmp.ovh/2026/05/11/IL6IhiUS.png">
+<img src="https://s3.bmp.ovh/2026/05/11/YwIfgJ2e.png">
+<img src="https://s3.bmp.ovh/2026/05/11/iybHUucD.png">
+
+<div class="bottom-btn">
+  <button onclick="goSign()">立即报名</button>
+</div>
+
+<script>
+function goSign() {
+  window.location.href = "https://v.wjx.cn/vm/Qscmhn1.aspx#";
+}
+
+// 倒计时
+function startCountdown() {
+  const end = new Date("2026-06-01 00:00:00").getTime();
+  setInterval(() => {
+    let now = Date.now();
+    let diff = end - now;
+    if (diff < 0) diff = 0;
+    const d = Math.floor(diff / 86400000);
+    const h = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
+    const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+    const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+    document.getElementById("countTime").innerText = `${d}天${h}:${m}:${s}`;
+  }, 1000);
+}
+startCountdown();
+
+// 数据增长
+setInterval(() => {
+  let s = document.getElementById("sign");
+  let v = document.getElementById("view");
+  let j = document.getElementById("joinNum");
+  let add = Math.floor(Math.random() * 3);
+  s.innerText = +s.innerText + add;
+  v.innerText = +v.innerText + Math.floor(Math.random() * 10);
+  j.innerText = s.innerText;
+}, 4000);
+
+// 头像滚动
+const surnames = ["王","李","张","刘","陈","杨","黄","赵","吴","周","徐","孙","马","朱","胡"];
+const box = document.getElementById("avatarBox");
+
+function create30UniqueAvatars() {
+  let arr = [];
+  for (let i=0;i<30;i++) {
+    arr.push({
+      img: `https://picsum.photos/seed/avatar-final-${i}/100/100`,
+      name: surnames[Math.floor(Math.random() * surnames.length)] + "***"
+    });
+  }
+  return arr;
+}
+
+const data = create30UniqueAvatars();
+const groups = [
+  data.slice(0,5),
+  data.slice(5,10),
+  data.slice(10,15),
+  data.slice(15,20),
+  data.slice(20,25),
+  data.slice(25,30)
+];
+
+function renderAvatarList() {
+  let html = "";
+  [...groups, ...groups].forEach(group => {
+    html += `<div class="avatar-row">`;
+    group.forEach(item => {
+      html += `
+        <div class="avatar-item">
+          <img src="${item.img}">
+          <div class="avatar-name">${item.name}</div>
+        </div>
+      `;
+    });
+    html += `</div>`;
+  });
+  box.innerHTML = html;
+}
+
+renderAvatarList();
+
+// 弹幕
+const barrage = document.getElementById("barrageContainer");
+let barOn = true;
+document.getElementById("barrageToggle").onclick = () => {
+  barOn = !barOn;
+  barrage.innerHTML = "";
+};
+const barNames = ["王先生","李女士","张先生","刘女士","陈先生","杨女士"];
+function sendBarrage() {
+  if (!barOn) return;
+  let b = document.createElement("div");
+  b.className = "barrage-item";
+  b.style.top = Math.random()*100 + 15 + "px";
+  b.innerHTML = `<img src="https://picsum.photos/seed/${Math.random()}"> 恭喜 ${barNames[Math.floor(Math.random()*barNames.length)]} 报名成功`;
+  b.style.animation = "barrageMove 14s linear";
+  barrage.appendChild(b);
+  setTimeout(() => b.remove(), 14000);
+}
+setInterval(sendBarrage, 3000);
+
+// 客服弹窗
+const popup = document.getElementById("popup");
+const serviceBtn = document.getElementById("serviceBtn");
+const closePopup = document.getElementById("closePopup");
+
+serviceBtn.onclick = () => {
+  popup.classList.add("show");
+};
+closePopup.onclick = () => {
+  popup.classList.remove("show");
+};
+popup.onclick = (e) => {
+  if(e.target === popup) popup.classList.remove("show");
+};
+</script>
+</body>
+</html>
